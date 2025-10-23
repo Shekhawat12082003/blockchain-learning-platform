@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import enhancedAIService from '../services/enhancedAIService';
-
-
 const QuizInterface = () => {
   const [subject, setSubject] = useState('');
   const [difficulty, setDifficulty] = useState('medium');
@@ -12,13 +10,11 @@ const QuizInterface = () => {
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(false);
-
   const generateQuiz = async () => {
     if (!subject) {
       alert('Please enter a subject!');
       return;
     }
-
     setLoading(true);
     try {
       const questions = await enhancedAIService.generateQuiz(subject, difficulty, questionCount);
@@ -34,26 +30,22 @@ const QuizInterface = () => {
       setLoading(false);
     }
   };
-
   const selectAnswer = (answer) => {
     setSelectedAnswers({
       ...selectedAnswers,
       [currentQuestion]: answer
     });
   };
-
   const nextQuestion = () => {
     if (currentQuestion < quiz.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
-
   const previousQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
-
   const submitQuiz = () => {
     let correctCount = 0;
     quiz.forEach((q, index) => {
@@ -64,7 +56,6 @@ const QuizInterface = () => {
     setScore(correctCount);
     setShowResults(true);
   };
-
   const restartQuiz = () => {
     setQuiz(null);
     setSubject('');
@@ -73,7 +64,6 @@ const QuizInterface = () => {
     setShowResults(false);
     setScore(0);
   };
-
   if (loading) {
     return (
       <div className="quiz-interface">
@@ -84,14 +74,12 @@ const QuizInterface = () => {
       </div>
     );
   }
-
   if (!quiz) {
     return (
       <div className="quiz-interface">
         <div className="quiz-setup">
           <h2>📝 Take a Quiz</h2>
           <p>Test your knowledge and track your progress</p>
-
           <div className="setup-form">
             <div className="form-group">
               <label>Subject/Topic:</label>
@@ -102,7 +90,6 @@ const QuizInterface = () => {
                 placeholder="e.g., Python Programming, Algebra, History"
               />
             </div>
-
             <div className="form-group">
               <label>Difficulty Level:</label>
               <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
@@ -112,7 +99,6 @@ const QuizInterface = () => {
                 <option value="expert">Expert</option>
               </select>
             </div>
-
             <div className="form-group">
               <label>Number of Questions:</label>
               <input
@@ -123,12 +109,10 @@ const QuizInterface = () => {
                 max="20"
               />
             </div>
-
             <button className="generate-btn" onClick={generateQuiz}>
               Generate Quiz 🚀
             </button>
           </div>
-
           <div className="quiz-benefits">
             <h3>Why Take Quizzes?</h3>
             <ul>
@@ -142,11 +126,9 @@ const QuizInterface = () => {
       </div>
     );
   }
-
   if (showResults) {
     const percentage = Math.round((score / quiz.length) * 100);
     const passed = percentage >= 70;
-
     return (
       <div className="quiz-interface">
         <div className="quiz-results">
@@ -159,13 +141,11 @@ const QuizInterface = () => {
             <p className="percentage">{percentage}%</p>
             <p className="status">{passed ? 'You Passed!' : 'Try Again'}</p>
           </div>
-
           <div className="results-breakdown">
             <h3>Question Review</h3>
             {quiz.map((q, index) => {
               const userAnswer = selectedAnswers[index];
               const isCorrect = userAnswer === q.correctAnswer;
-
               return (
                 <div key={index} className={`question-result ${isCorrect ? 'correct' : 'incorrect'}`}>
                   <div className="question-header">
@@ -187,7 +167,6 @@ const QuizInterface = () => {
               );
             })}
           </div>
-
           <div className="results-actions">
             <button className="retry-btn" onClick={generateQuiz}>
               Retake Quiz
@@ -200,10 +179,8 @@ const QuizInterface = () => {
       </div>
     );
   }
-
   const currentQ = quiz[currentQuestion];
   const progress = ((currentQuestion + 1) / quiz.length) * 100;
-
   return (
     <div className="quiz-interface">
       <div className="quiz-header">
@@ -215,7 +192,6 @@ const QuizInterface = () => {
           <p>Question {currentQuestion + 1} of {quiz.length}</p>
         </div>
       </div>
-
       <div className="quiz-content">
         <div className="question-card">
           <h3 className="question-text">{currentQ.question}</h3>
@@ -223,7 +199,6 @@ const QuizInterface = () => {
             {currentQ.options.map((option, index) => {
               const optionLetter = option.charAt(0);
               const isSelected = selectedAnswers[currentQuestion] === optionLetter;
-
               return (
                 <div
                   key={index}
@@ -237,7 +212,6 @@ const QuizInterface = () => {
             })}
           </div>
         </div>
-
         <div className="quiz-navigation">
           <button
             className="nav-btn prev"
@@ -246,7 +220,6 @@ const QuizInterface = () => {
           >
             ← Previous
           </button>
-
           {currentQuestion === quiz.length - 1 ? (
             <button className="submit-btn" onClick={submitQuiz}>
               Submit Quiz
@@ -260,7 +233,6 @@ const QuizInterface = () => {
             </button>
           )}
         </div>
-
         <div className="answer-indicator">
           {quiz.map((_, index) => (
             <div
@@ -274,5 +246,4 @@ const QuizInterface = () => {
     </div>
   );
 };
-
 export default QuizInterface;

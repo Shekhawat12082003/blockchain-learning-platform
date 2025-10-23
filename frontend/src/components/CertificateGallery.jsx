@@ -1,35 +1,27 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS, CONTRACT_ABI, CHAIN_ID } from '../config/constants';
-
-
 const CertificateGallery = () => {
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [filterSubject, setFilterSubject] = useState('All');
   const [subjects, setSubjects] = useState(['All']);
-
   useEffect(() => {
     loadCertificates();
   }, []);
-
   const loadCertificates = async () => {
     try {
       setLoading(true);
       setError('');
-
       if (!window.ethereum) {
         throw new Error('Please install MetaMask');
       }
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const address = await signer.getAddress();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
       const tokenIds = await contract.getUserCertificates(address);
-      
       const certPromises = tokenIds.map(async (tokenId) => {
         const [holder, subject, timestamp, sessionCount, revoked, uri] = await contract.getCertificateData(tokenId);
         return {
@@ -41,15 +33,11 @@ const CertificateGallery = () => {
           uri
         };
       });
-
       const certs = await Promise.all(certPromises);
-      
       const validCerts = certs.filter(cert => !cert.revoked);
       setCertificates(validCerts);
-
       const uniqueSubjects = [...new Set(validCerts.map(c => c.subject))];
       setSubjects(uniqueSubjects);
-
       setLoading(false);
     } catch (err) {
       console.error('Error loading certificates:', err);
@@ -57,11 +45,9 @@ const CertificateGallery = () => {
       setLoading(false);
     }
   };
-
   const filteredCertificates = filterSubject === 'All' 
     ? certificates 
     : certificates.filter(cert => cert.subject === filterSubject);
-
   const downloadCertificate = (cert) => {
     const certHTML = `
       <!DOCTYPE html>
@@ -93,7 +79,6 @@ const CertificateGallery = () => {
       </body>
       </html>
     `;
-
     const blob = new Blob([certHTML], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -102,7 +87,6 @@ const CertificateGallery = () => {
     a.click();
     URL.revokeObjectURL(url);
   };
-
   if (loading) {
     return (
       <div className="certificate-gallery">
@@ -110,7 +94,6 @@ const CertificateGallery = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="certificate-gallery">
@@ -118,13 +101,11 @@ const CertificateGallery = () => {
       </div>
     );
   }
-
   return (
     <div className="certificate-gallery">
       <div className="gallery-header">
         <h1>🏆 My Certificate Gallery</h1>
         <p className="gallery-subtitle">Your blockchain-verified achievements</p>
-        
         <div className="filter-bar">
           <label>Filter by Subject:</label>
           <select 
@@ -137,7 +118,6 @@ const CertificateGallery = () => {
             ))}
           </select>
         </div>
-
         <div className="gallery-stats">
           <div className="stat-item">
             <span className="stat-value">{certificates.length}</span>
@@ -155,7 +135,6 @@ const CertificateGallery = () => {
           </div>
         </div>
       </div>
-
       {filteredCertificates.length === 0 ? (
         <div className="no-certificates">
           <p>📚 No certificates found{filterSubject !== 'All' ? ` for ${filterSubject}` : ''}.</p>
@@ -188,5 +167,4 @@ const CertificateGallery = () => {
     </div>
   );
 };
-
 export default CertificateGallery;

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import enhancedAIService from '../services/enhancedAIService';
-
 function ConceptExplainer() {
   const [concept, setConcept] = useState('');
   const [subject, setSubject] = useState('');
@@ -8,13 +7,11 @@ function ConceptExplainer() {
   const [explanation, setExplanation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
-
   const explainConcept = async () => {
     if (!concept || !subject) {
       alert('Please enter both concept and subject!');
       return;
     }
-
     setLoading(true);
     try {
       const result = await enhancedAIService.explainConcept(concept, subject, depth);
@@ -27,13 +24,11 @@ function ConceptExplainer() {
       setLoading(false);
     }
   };
-
   const newExplanation = () => {
     setExplanation(null);
     setConcept('');
     setSubject('');
   };
-
   if (loading) {
     return (
       <div className="concept-explainer">
@@ -44,14 +39,12 @@ function ConceptExplainer() {
       </div>
     );
   }
-
   if (!explanation) {
     return (
       <div className="concept-explainer">
         <div className="explainer-setup">
           <h2>💡 Concept Explainer</h2>
           <p>Get clear, detailed explanations for any concept</p>
-
           <div className="setup-form">
             <div className="form-group">
               <label>What concept do you want to understand?</label>
@@ -62,7 +55,6 @@ function ConceptExplainer() {
                 placeholder="e.g., Recursion, Photosynthesis, Blockchain"
               />
             </div>
-
             <div className="form-group">
               <label>Subject Area:</label>
               <input
@@ -72,7 +64,6 @@ function ConceptExplainer() {
                 placeholder="e.g., Computer Science, Biology, Economics"
               />
             </div>
-
             <div className="form-group">
               <label>Explanation Depth:</label>
               <div className="depth-selector">
@@ -96,12 +87,10 @@ function ConceptExplainer() {
                 </button>
               </div>
             </div>
-
             <button className="explain-btn" onClick={explainConcept}>
               Explain This Concept 🔍
             </button>
           </div>
-
           {history.length > 0 && (
             <div className="history-section">
               <h3>📜 Recent Explanations</h3>
@@ -118,7 +107,6 @@ function ConceptExplainer() {
       </div>
     );
   }
-
   return (
     <div className="concept-explainer">
       <div className="explanation-view">
@@ -127,7 +115,6 @@ function ConceptExplainer() {
           <p className="subject-tag">{explanation.subject}</p>
           <span className="depth-badge">{explanation.depth}</span>
         </div>
-
         <div className="explanation-content">
           {explanation.explanation.split('\n').map((line, index) => {
             if (line.startsWith('**')) {
@@ -140,7 +127,6 @@ function ConceptExplainer() {
             return <br key={index} />;
           })}
         </div>
-
         <div className="explanation-actions">
           <button className="new-explanation-btn" onClick={newExplanation}>
             Explain Another Concept
@@ -149,7 +135,6 @@ function ConceptExplainer() {
             Practice This Concept
           </button>
         </div>
-
         <div className="related-concepts">
           <h3>🔗 Continue Learning</h3>
           <div className="related-tags">
@@ -163,5 +148,4 @@ function ConceptExplainer() {
     </div>
   );
 };
-
 export default ConceptExplainer;

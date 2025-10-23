@@ -5,7 +5,6 @@ import './styles/index.css';
 import './styles/components.css';
 import './styles/features.css';
 import './styles/ChatInterface.css';
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />

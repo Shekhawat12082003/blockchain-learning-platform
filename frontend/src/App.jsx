@@ -11,10 +11,8 @@ import QuizInterface from './components/QuizInterface';
 import StudyPlanner from './components/StudyPlanner';
 import ConceptExplainer from './components/ConceptExplainer';
 import './styles/App.css';
-
 function Sidebar() {
   const location = useLocation();
-  
   const menuItems = [
     { path: '/', icon: '💬', label: 'AI Chat' },
     { path: '/quiz', icon: '📝', label: 'Quiz' },
@@ -25,14 +23,12 @@ function Sidebar() {
     { path: '/leaderboard', icon: '🏆', label: 'Leaderboard' },
     { path: '/verify', icon: '✓', label: 'Verify Certificate' },
   ];
-
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
         <h1>🎓 AI Tutor</h1>
         <p>Web3 Learning</p>
       </div>
-      
       <nav className="sidebar-nav">
         {menuItems.map((item) => (
           <Link
@@ -45,23 +41,19 @@ function Sidebar() {
           </Link>
         ))}
       </nav>
-      
       <div className="sidebar-footer">
         <p>Built with AI & Blockchain</p>
       </div>
     </aside>
   );
 }
-
 function App() {
   const [account, setAccount] = useState(null);
   const [sessionData, setSessionData] = useState(null);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
-
   const handleWalletConnect = (connectedAccount) => {
     setAccount(connectedAccount);
   };
-
   const handleSessionComplete = (messages) => {
     setSessionData({
       messages,
@@ -70,12 +62,10 @@ function App() {
     });
     setShowCertificateModal(true);
   };
-
   return (
     <Router>
       <div className="app">
         <Sidebar />
-        
         <div className="app-main">
           <nav className="navbar">
             <div className="nav-container">
@@ -85,7 +75,6 @@ function App() {
               <ConnectWallet onConnect={handleWalletConnect} />
             </div>
           </nav>
-
           <main className="main-content">
             <Routes>
               <Route path="/" element={
@@ -97,7 +86,6 @@ function App() {
                         onSessionComplete={handleSessionComplete}
                       />
                     </div>
-
                     {showCertificateModal && sessionData && (
                       <div className="certificate-modal">
                         <IssueCertificate 
@@ -113,7 +101,6 @@ function App() {
                       </div>
                     )}
                   </div>
-
                   {!account && (
                     <div className="info-cards">
                       <div className="info-card">
@@ -132,7 +119,6 @@ function App() {
                   )}
                 </div>
               } />
-
               <Route path="/quiz" element={<QuizInterface />} />
               <Route path="/explain" element={<ConceptExplainer />} />
               <Route path="/study-plan" element={<StudyPlanner />} />
@@ -142,7 +128,6 @@ function App() {
               <Route path="/verify" element={<VerifyCertificate />} />
             </Routes>
           </main>
-
           <footer className="footer">
             <p>Contract: 0xF5689A0B960b9fED8D40422676B580FD10Ed6322 on Core Testnet2</p>
           </footer>
@@ -151,5 +136,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;

@@ -2,7 +2,6 @@ export const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS || '0xF568
 export const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID || '1114');
 export const CHAIN_NAME = 'Core Testnet2';
 export const RPC_URL = 'https://rpc.test2.btcs.network';
-
 export const CONTRACT_ABI = [
   "function issueCertificate(address to, string memory subject, string memory tokenURI_, uint256 sessionCount) external returns (uint256)",
   "function revokeCertificate(uint256 tokenId) external",
@@ -23,7 +22,6 @@ export const CONTRACT_ABI = [
   "event CertificateRevoked(uint256 indexed tokenId)",
   "event ProgressUpdated(address indexed user, uint256 points, uint256 level)"
 ];
-
 export const AI_PROVIDERS = {
   GEMINI: 'gemini',
   HUGGINGFACE: 'huggingface',

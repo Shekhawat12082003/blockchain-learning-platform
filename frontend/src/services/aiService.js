@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { AI_PROVIDERS } from '../config/constants';
-
 class AIService {
   constructor() {
     this.provider = this.detectProvider();
@@ -8,7 +7,6 @@ class AIService {
     this.availableProviders = this.getAvailableProviders();
     this.useMockMode = this.availableProviders.length === 0 || import.meta.env.VITE_USE_MOCK_AI === 'true';
   }
-
   getAvailableProviders() {
     const providers = [];
     if (import.meta.env.VITE_GEMINI_API_KEY) providers.push(AI_PROVIDERS.GEMINI);
@@ -16,14 +14,12 @@ class AIService {
     if (import.meta.env.VITE_COHERE_API_KEY) providers.push(AI_PROVIDERS.COHERE);
     return providers;
   }
-
   detectProvider() {
     if (import.meta.env.VITE_GEMINI_API_KEY) return AI_PROVIDERS.GEMINI;
     if (import.meta.env.VITE_HUGGINGFACE_API_KEY) return AI_PROVIDERS.HUGGINGFACE;
     if (import.meta.env.VITE_COHERE_API_KEY) return AI_PROVIDERS.COHERE;
     return null;
   }
-
   getMockResponse(message, subject) {
     const responses = {
       mathematics: [
@@ -47,30 +43,22 @@ class AIService {
         "Interesting topic! Here's what you should know...",
       ]
     };
-
     const subjectResponses = responses[subject] || responses.general;
     const randomResponse = subjectResponses[Math.floor(Math.random() * subjectResponses.length)];
-    
     return `${randomResponse}\n\n[🤖 Demo Mode: Using mock AI responses. Add a valid API key in .env to use real AI tutoring!]`;
   }
-
   async sendMessage(userMessage, subject = 'general') {
     if (this.useMockMode || this.availableProviders.length === 0) {
       console.log('🤖 Using Mock AI Mode');
       this.conversationHistory.push({ role: 'user', content: userMessage });
-      
       await new Promise(resolve => setTimeout(resolve, 800));
-      
       const response = this.getMockResponse(userMessage, subject);
       this.conversationHistory.push({ role: 'assistant', content: response });
       return { role: 'assistant', content: response };
     }
-
     this.conversationHistory.push({ role: 'user', content: userMessage });
-
     for (let i = 0; i < this.availableProviders.length; i++) {
       const provider = i === 0 ? this.provider : this.availableProviders[i];
-      
       try {
         let response;
         switch (provider) {
@@ -89,14 +77,11 @@ class AIService {
           default:
             continue;
         }
-
         this.provider = provider;
         this.conversationHistory.push({ role: 'assistant', content: response });
         return { role: 'assistant', content: response };
-
       } catch (error) {
         console.warn(`${provider} failed:`, error.message);
-        
         if (i === this.availableProviders.length - 1) {
           console.log('All providers failed, using mock mode');
           this.useMockMode = true;
@@ -109,11 +94,9 @@ class AIService {
     this.conversationHistory.pop();
     return this.sendMessage(userMessage, subject);
   }
-
   async callGemini(message, subject) {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     const prompt = `You are a helpful tutor specializing in ${subject}. Provide clear, concise explanations. Keep responses under 200 words.\n\nUser: ${message}`;
-
     try {
       const response = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
@@ -130,18 +113,15 @@ class AIService {
           }
         }
       );
-
       return response.data.candidates[0].content.parts[0].text;
     } catch (error) {
       console.error('Gemini API Error:', error.response?.data || error.message);
       throw new Error(`Gemini Error: ${error.response?.data?.error?.message || error.message}`);
     }
   }
-
   async callHuggingFace(message, subject) {
     const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
     const systemPrompt = `You are a helpful tutor specializing in ${subject}. Provide clear, concise explanations. Keep responses under 200 words.`;
-
     try {
       const response = await axios.post(
         'https://api-inference.huggingface.co/models/google/flan-t5-base',
@@ -160,18 +140,15 @@ class AIService {
           }
         }
       );
-
       return response.data[0]?.generated_text || response.data.generated_text || 'Response generated successfully.';
     } catch (error) {
       console.error('HuggingFace API Error:', error.response?.data || error.message);
       throw new Error(`HuggingFace Error: ${error.response?.data?.error || error.message}`);
     }
   }
-
   async callCohere(message, subject) {
     const apiKey = import.meta.env.VITE_COHERE_API_KEY;
     const systemPrompt = `You are a helpful and knowledgeable tutor specializing in ${subject}. Provide clear, concise explanations and encourage learning. Keep responses under 200 words.`;
-
     try {
       const response = await axios.post(
         'https://api.cohere.com/v2/chat',
@@ -189,21 +166,17 @@ class AIService {
           }
         }
       );
-
       return response.data.message?.content[0]?.text || response.data.text;
     } catch (error) {
       console.error('Cohere API Error:', error.response?.data || error.message);
       throw new Error(`Cohere Error: ${error.response?.data?.message || error.message}`);
     }
   }
-
   resetConversation() {
     this.conversationHistory = [];
   }
-
   getConversationHistory() {
     return this.conversationHistory;
   }
 }
-
 export default new AIService();

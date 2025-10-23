@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import contractService from '../services/contractService';
-
 const IssueCertificate = ({ account, sessionData }) => {
   const [isIssuing, setIsIssuing] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [subject, setSubject] = useState('');
   const [sessionCount, setSessionCount] = useState(1);
-
   const uploadToIPFS = async (data) => {
     const metadata = {
       name: `Skill Certificate - ${data.subject || 'General'}`,
@@ -20,45 +18,34 @@ const IssueCertificate = ({ account, sessionData }) => {
       ],
       session_summary: data.summary || 'Completed personalized learning session'
     };
-
     const mockUri = `ipfs://QmMockHash${Date.now()}`;
     console.log('Certificate Metadata:', metadata);
-    
     return mockUri;
   };
-
   const handleIssueCertificate = async () => {
     if (!account) {
       setError('Please connect your wallet first');
       return;
     }
-
     if (!subject || subject.trim() === '') {
       setError('Please enter a subject');
       return;
     }
-
     setIsIssuing(true);
     setError(null);
     setResult(null);
-
     try {
       await contractService.connectWallet();
-
       const certData = {
         subject: subject,
         messageCount: sessionData?.messages?.length || 0,
         sessionCount: sessionCount,
         summary: 'Successfully completed AI tutoring session'
       };
-
       const tokenURI = await uploadToIPFS(certData);
-
       const result = await contractService.issueCertificate(account, subject, tokenURI, sessionCount);
-
       const pointsEarned = sessionCount * 10;
       const level = Math.floor((result.totalPoints || pointsEarned) / 100);
-
       setResult({
         success: true,
         tokenId: result.tokenId,
@@ -67,7 +54,6 @@ const IssueCertificate = ({ account, sessionData }) => {
         level: level,
         message: 'Certificate issued successfully! 🎉'
       });
-
     } catch (err) {
       console.error('Error issuing certificate:', err);
       setError(err.message || 'Failed to issue certificate');
@@ -75,17 +61,14 @@ const IssueCertificate = ({ account, sessionData }) => {
       setIsIssuing(false);
     }
   };
-
   if (!sessionData) {
     return null;
   }
-
   return (
     <div className="issue-certificate">
       <div className="certificate-card">
         <h3>📜 Issue Learning Certificate</h3>
         <p>Complete your learning session with a blockchain certificate!</p>
-        
         <div className="certificate-form">
           <div className="form-group">
             <label htmlFor="subject">Subject:</label>
@@ -98,7 +81,6 @@ const IssueCertificate = ({ account, sessionData }) => {
               disabled={isIssuing || result}
             />
           </div>
-
           <div className="form-group">
             <label htmlFor="sessionCount">Sessions Completed:</label>
             <input
@@ -110,7 +92,6 @@ const IssueCertificate = ({ account, sessionData }) => {
               disabled={isIssuing || result}
             />
           </div>
-
           {sessionData && (
             <div className="session-summary">
               <p><strong>Chat Messages:</strong> {sessionData.messages?.length || 0}</p>
@@ -118,7 +99,6 @@ const IssueCertificate = ({ account, sessionData }) => {
             </div>
           )}
         </div>
-
         <button 
           onClick={handleIssueCertificate}
           disabled={isIssuing || result || !subject}
@@ -126,7 +106,6 @@ const IssueCertificate = ({ account, sessionData }) => {
         >
           {isIssuing ? 'Issuing...' : result ? 'Certificate Issued ✓' : 'Issue Certificate'}
         </button>
-
         {result && (
           <div className="success-message">
             <p>✅ {result.message}</p>
@@ -136,7 +115,6 @@ const IssueCertificate = ({ account, sessionData }) => {
             <p><strong>Transaction:</strong> <a href={`https://scan.test2.btcs.network/tx/${result.txHash}`} target="_blank" rel="noopener noreferrer">View on Explorer</a></p>
           </div>
         )}
-
         {error && (
           <div className="error-message">
             ❌ {error}
@@ -146,5 +124,4 @@ const IssueCertificate = ({ account, sessionData }) => {
     </div>
   );
 };
-
 export default IssueCertificate;

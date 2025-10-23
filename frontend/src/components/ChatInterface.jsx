@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import aiService from '../services/aiService';
 import '../styles/ChatInterface.css';
-
 const ChatInterface = ({ account, onSessionComplete }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -9,15 +8,12 @@ const ChatInterface = ({ account, onSessionComplete }) => {
   const [subject, setSubject] = useState('general');
   const [sessionStarted, setSessionStarted] = useState(false);
   const messagesEndRef = useRef(null);
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
   useEffect(() => {
     if (account && !sessionStarted) {
       const welcomeMessage = {
@@ -28,16 +24,13 @@ const ChatInterface = ({ account, onSessionComplete }) => {
       setSessionStarted(true);
     }
   }, [account]);
-
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputMessage.trim() || isLoading) return;
-
     const userMessage = { role: 'user', content: inputMessage };
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsLoading(true);
-
     try {
       const response = await aiService.sendMessage(inputMessage, subject);
       setMessages(prev => [...prev, response]);
@@ -51,7 +44,6 @@ const ChatInterface = ({ account, onSessionComplete }) => {
       setIsLoading(false);
     }
   };
-
   const handleCompleteSession = () => {
     if (messages.length > 3) { // At least some conversation happened
       if (onSessionComplete) {
@@ -61,7 +53,6 @@ const ChatInterface = ({ account, onSessionComplete }) => {
       alert('Please have a longer tutoring session before requesting a certificate.');
     }
   };
-
   if (!account) {
     return (
       <div className="chat-interface">
@@ -72,7 +63,6 @@ const ChatInterface = ({ account, onSessionComplete }) => {
       </div>
     );
   }
-
   return (
     <div className="chat-interface">
       <div className="chat-header">
@@ -89,7 +79,6 @@ const ChatInterface = ({ account, onSessionComplete }) => {
           </select>
         </div>
       </div>
-
       <div className="chat-messages">
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.role}`}>
@@ -113,7 +102,6 @@ const ChatInterface = ({ account, onSessionComplete }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-
       <form onSubmit={handleSendMessage} className="chat-input-form">
         <input
           type="text"
@@ -127,7 +115,6 @@ const ChatInterface = ({ account, onSessionComplete }) => {
           Send
         </button>
       </form>
-
       {messages.length > 3 && (
         <div className="session-actions">
           <button onClick={handleCompleteSession} className="complete-btn">
@@ -138,5 +125,4 @@ const ChatInterface = ({ account, onSessionComplete }) => {
     </div>
   );
 };
-
 export default ChatInterface;

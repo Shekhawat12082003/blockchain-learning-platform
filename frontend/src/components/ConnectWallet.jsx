@@ -1,27 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import contractService from '../services/contractService';
 import { formatAddress } from '../utils/helpers';
-
 function ConnectWallet({ onConnect }) {
   const [account, setAccount] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     checkConnection();
-
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', handleAccountsChanged);
       window.ethereum.on('chainChanged', () => window.location.reload());
     }
-
     return () => {
       if (window.ethereum) {
         window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
       }
     };
   }, []);
-
   const checkConnection = async () => {
     if (window.ethereum) {
       try {
@@ -36,7 +31,6 @@ function ConnectWallet({ onConnect }) {
       }
     }
   };
-
   const handleAccountsChanged = (accounts) => {
     if (accounts.length === 0) {
       setAccount(null);
@@ -46,11 +40,9 @@ function ConnectWallet({ onConnect }) {
       if (onConnect) onConnect(accounts[0]);
     }
   };
-
   const connectWallet = async () => {
     setIsConnecting(true);
     setError(null);
-
     try {
       const connectedAccount = await contractService.connectWallet();
       setAccount(connectedAccount);
@@ -62,12 +54,10 @@ function ConnectWallet({ onConnect }) {
       setIsConnecting(false);
     }
   };
-
   const disconnectWallet = () => {
     setAccount(null);
     if (onConnect) onConnect(null);
   };
-
   return (
     <div className="connect-wallet">
       {!account ? (
@@ -93,5 +83,4 @@ function ConnectWallet({ onConnect }) {
     </div>
   );
 };
-
 export default ConnectWallet;

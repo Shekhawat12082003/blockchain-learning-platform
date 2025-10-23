@@ -1,42 +1,32 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../config/constants';
-
-
 const Leaderboard = () => {
   const [globalStats, setGlobalStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [currentUserAddress, setCurrentUserAddress] = useState('');
-
   useEffect(() => {
     loadGlobalStats();
   }, []);
-
   const loadGlobalStats = async () => {
     try {
       setLoading(true);
       setError('');
-
       if (!window.ethereum) {
         throw new Error('Please install MetaMask');
       }
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const address = await signer.getAddress();
       setCurrentUserAddress(address);
-
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
       const [totalCerts, totalUsersCount, totalTokens] = await contract.getGlobalStats();
-
       setGlobalStats({
         totalCertificates: totalCerts.toNumber(),
         totalUsers: totalUsersCount.toNumber(),
         totalTokens: totalTokens.toNumber()
       });
-
       setLoading(false);
     } catch (err) {
       console.error('Error loading global stats:', err);
@@ -44,7 +34,6 @@ const Leaderboard = () => {
       setLoading(false);
     }
   };
-
   if (loading) {
     return (
       <div className="leaderboard">
@@ -52,7 +41,6 @@ const Leaderboard = () => {
       </div>
     );
   }
-
   if (error) {
     return (
       <div className="leaderboard">
@@ -60,14 +48,12 @@ const Leaderboard = () => {
       </div>
     );
   }
-
   return (
     <div className="leaderboard">
       <div className="leaderboard-header">
         <h1>🏆 Global Leaderboard</h1>
         <p className="leaderboard-subtitle">Platform-wide learning achievements</p>
       </div>
-
       <div className="global-stats">
         <div className="global-stat-card">
           <div className="stat-icon">🎓</div>
@@ -76,7 +62,6 @@ const Leaderboard = () => {
             <p>Total Certificates Issued</p>
           </div>
         </div>
-
         <div className="global-stat-card">
           <div className="stat-icon">👥</div>
           <div className="stat-content">
@@ -84,7 +69,6 @@ const Leaderboard = () => {
             <p>Total Learners</p>
           </div>
         </div>
-
         <div className="global-stat-card">
           <div className="stat-icon">🔢</div>
           <div className="stat-content">
@@ -92,7 +76,6 @@ const Leaderboard = () => {
             <p>Unique NFT Tokens</p>
           </div>
         </div>
-
         <div className="global-stat-card">
           <div className="stat-icon">📊</div>
           <div className="stat-content">
@@ -105,7 +88,6 @@ const Leaderboard = () => {
           </div>
         </div>
       </div>
-
       <div className="platform-info">
         <h2>🌐 Platform Overview</h2>
         <div className="info-grid">
@@ -116,7 +98,6 @@ const Leaderboard = () => {
               All achievements are permanently recorded on the Core Blockchain as soulbound NFTs.
             </p>
           </div>
-
           <div className="info-card">
             <h3>How It Works</h3>
             <ul>
@@ -127,7 +108,6 @@ const Leaderboard = () => {
               <li>🔒 Certificates are soulbound (non-transferable)</li>
             </ul>
           </div>
-
           <div className="info-card">
             <h3>Points & Levels</h3>
             <p>
@@ -137,7 +117,6 @@ const Leaderboard = () => {
               <strong>Blockchain:</strong> All data stored on Core Testnet2
             </p>
           </div>
-
           <div className="info-card">
             <h3>Your Current Rank</h3>
             <p className="user-wallet">
@@ -147,7 +126,6 @@ const Leaderboard = () => {
           </div>
         </div>
       </div>
-
       <div className="coming-soon">
         <h2>🔜 Coming Soon</h2>
         <div className="features-list">
@@ -181,7 +159,6 @@ const Leaderboard = () => {
           </div>
         </div>
       </div>
-
       <div className="blockchain-info">
         <h3>⛓️ Blockchain Details</h3>
         <div className="blockchain-details">
@@ -194,5 +171,4 @@ const Leaderboard = () => {
     </div>
   );
 };
-
 export default Leaderboard;
