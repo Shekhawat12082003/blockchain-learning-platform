@@ -1,0 +1,22 @@
+{
+  "name": "personalized-learning-tutor-dapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network testnet",
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "ethereum-waffle": "^4.0.10",
+    "hardhat": "^2.14.0",
+    "chai": "^4.3.7",
+    "ethers": "^5.7.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.0"
+  }
+}
