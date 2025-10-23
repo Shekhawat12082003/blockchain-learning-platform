@@ -25,11 +25,9 @@ class EnhancedAIService {
     this.currentSubject = subject || this.currentSubject;
     this.userLevel = level || this.userLevel;
 
-    // Build enhanced prompt for teaching
     const systemPrompt = this.buildTeachingPrompt(subject, level, learningStyle);
     
     try {
-      // Try free providers in order
       let response = await this.tryProvider('gemini', userMessage, systemPrompt);
       if (!response) response = await this.tryProvider('huggingface', userMessage, systemPrompt);
       if (!response) response = await this.tryProvider('cohere', userMessage, systemPrompt);
@@ -39,7 +37,6 @@ class EnhancedAIService {
         response = this.getMockTeachingResponse(userMessage, subject);
       }
 
-      // Add to conversation context
       this.conversationContext.push({
         role: 'user',
         content: userMessage
@@ -87,7 +84,6 @@ class EnhancedAIService {
         return this.getMockQuiz(subject, difficulty, questionCount);
       }
 
-      // Extract JSON from response
       const jsonMatch = response.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
@@ -352,7 +348,6 @@ Be patient, encouraging, and thorough. Your goal is mastery, not just informatio
     return response.data.message?.content[0]?.text || response.data.text;
   }
 
-  // Mock responses for offline/fallback mode
   getMockTeachingResponse(message, subject) {
     const responses = {
       'Mathematics': `Great question about ${subject}! Let me break this down step by step:
@@ -370,11 +365,7 @@ Would you like me to explain any part in more detail?`,
       'Programming': `Excellent! Let's tackle this programming concept:
 
 \`\`\`
-// Here's a simple example
 function example() {
-  // Step 1: Understand the problem
-  // Step 2: Break it into smaller parts
-  // Step 3: Implement solution
 }
 \`\`\`
 
@@ -544,7 +535,6 @@ Keep up the great work! 🎯`,
   }
 
   extractRecommendations(analysisText) {
-    // Simple extraction - in production, use more sophisticated parsing
     return ['Focus on weak areas', 'Practice daily', 'Review fundamentals'];
   }
 
@@ -555,12 +545,10 @@ Keep up the great work! 🎯`,
     return 50;
   }
 
-  // Clear conversation context
   clearContext() {
     this.conversationContext = [];
   }
 
-  // Get conversation history
   getContext() {
     return this.conversationContext;
   }

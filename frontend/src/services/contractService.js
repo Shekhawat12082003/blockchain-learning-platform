@@ -14,16 +14,13 @@ class ContractService {
     }
 
     try {
-      // Request account access
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       
-      // Check if on correct network
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
       if (parseInt(chainId, 16) !== CHAIN_ID) {
         await this.switchNetwork();
       }
 
-      // Set up provider and signer
       this.provider = new ethers.providers.Web3Provider(window.ethereum);
       this.signer = this.provider.getSigner();
       this.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, this.signer);
@@ -42,7 +39,6 @@ class ContractService {
         params: [{ chainId: `0x${CHAIN_ID.toString(16)}` }],
       });
     } catch (switchError) {
-      // Chain not added, add it
       if (switchError.code === 4902) {
         await window.ethereum.request({
           method: 'wallet_addEthereumChain',
@@ -64,7 +60,6 @@ class ContractService {
   }
 
   async issueCertificate(toAddress, subject, metadataUri, sessionCount) {
-    // Ensure connection if not already connected
     if (!this.contract || !this.signer) {
       console.log('Contract not initialized, connecting wallet...');
       await this.connectWallet();
@@ -86,7 +81,6 @@ class ContractService {
       const receipt = await tx.wait();
       console.log('Transaction confirmed:', receipt);
       
-      // Extract tokenId and points from event
       const event = receipt.events?.find(e => e.event === 'CertificateIssued');
       const tokenId = event?.args?.tokenId?.toString();
       const points = event?.args?.points?.toString();
@@ -95,7 +89,6 @@ class ContractService {
     } catch (error) {
       console.error('Error issuing certificate:', error);
       
-      // Better error messages
       if (error.code === 4001) {
         throw new Error('Transaction rejected by user');
       } else if (error.code === -32603) {
@@ -110,7 +103,6 @@ class ContractService {
 
   async verifyCertificate(tokenId) {
     if (!this.contract) {
-      // Use provider without signer for read-only
       this.provider = new ethers.providers.JsonRpcProvider(RPC_URL);
       this.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, this.provider);
     }
@@ -120,7 +112,6 @@ class ContractService {
       const owner = await this.contract.ownerOf(tokenId);
       const tokenURI = await this.contract.tokenURI(tokenId);
       
-      // Get certificate data (includes revoked status)
       const [holder, subject, timestamp, sessionCount, revoked, uri] = await this.contract.getCertificateData(tokenId);
 
       return {

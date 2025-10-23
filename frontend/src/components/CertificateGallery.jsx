@@ -28,10 +28,8 @@ const CertificateGallery = () => {
       const address = await signer.getAddress();
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-      // Get all certificate token IDs for the user
       const tokenIds = await contract.getUserCertificates(address);
       
-      // Fetch details for each certificate
       const certPromises = tokenIds.map(async (tokenId) => {
         const [holder, subject, timestamp, sessionCount, revoked, uri] = await contract.getCertificateData(tokenId);
         return {
@@ -46,12 +44,10 @@ const CertificateGallery = () => {
 
       const certs = await Promise.all(certPromises);
       
-      // Filter out revoked certificates
       const validCerts = certs.filter(cert => !cert.revoked);
       setCertificates(validCerts);
 
-      // Extract unique subjects
-      const uniqueSubjects = ['All', ...new Set(validCerts.map(cert => cert.subject))];
+      const uniqueSubjects = [...new Set(validCerts.map(c => c.subject))];
       setSubjects(uniqueSubjects);
 
       setLoading(false);
@@ -67,7 +63,6 @@ const CertificateGallery = () => {
     : certificates.filter(cert => cert.subject === filterSubject);
 
   const downloadCertificate = (cert) => {
-    // Create a simple certificate HTML
     const certHTML = `
       <!DOCTYPE html>
       <html>

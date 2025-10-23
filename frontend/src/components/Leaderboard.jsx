@@ -29,7 +29,6 @@ const Leaderboard = () => {
 
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-      // Get global stats
       const [totalCerts, totalUsersCount, totalTokens] = await contract.getGlobalStats();
 
       setGlobalStats({

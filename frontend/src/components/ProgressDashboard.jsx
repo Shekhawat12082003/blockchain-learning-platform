@@ -30,7 +30,6 @@ const ProgressDashboard = () => {
 
       const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-      // Get user progress
       const [totalCertificates, totalSessions, points, level] = await contract.getUserProgress(userAddress);
 
       setProgress({
@@ -40,7 +39,6 @@ const ProgressDashboard = () => {
         level: level.toNumber()
       });
 
-      // Get certificates to build subject breakdown
       const tokenIds = await contract.getUserCertificates(userAddress);
       const subjectMap = {};
 

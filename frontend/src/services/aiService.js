@@ -18,14 +18,12 @@ class AIService {
   }
 
   detectProvider() {
-    // Prioritize free providers: Gemini, HuggingFace, Cohere
     if (import.meta.env.VITE_GEMINI_API_KEY) return AI_PROVIDERS.GEMINI;
     if (import.meta.env.VITE_HUGGINGFACE_API_KEY) return AI_PROVIDERS.HUGGINGFACE;
     if (import.meta.env.VITE_COHERE_API_KEY) return AI_PROVIDERS.COHERE;
     return null;
   }
 
-  // Mock AI responses for demo/testing
   getMockResponse(message, subject) {
     const responses = {
       mathematics: [
@@ -57,12 +55,10 @@ class AIService {
   }
 
   async sendMessage(userMessage, subject = 'general') {
-    // Use mock mode if no providers or explicitly enabled
     if (this.useMockMode || this.availableProviders.length === 0) {
       console.log('🤖 Using Mock AI Mode');
       this.conversationHistory.push({ role: 'user', content: userMessage });
       
-      // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800));
       
       const response = this.getMockResponse(userMessage, subject);
@@ -72,7 +68,6 @@ class AIService {
 
     this.conversationHistory.push({ role: 'user', content: userMessage });
 
-    // Try providers with fallback
     for (let i = 0; i < this.availableProviders.length; i++) {
       const provider = i === 0 ? this.provider : this.availableProviders[i];
       
@@ -95,7 +90,6 @@ class AIService {
             continue;
         }
 
-        // Success! Update current provider and return
         this.provider = provider;
         this.conversationHistory.push({ role: 'assistant', content: response });
         return { role: 'assistant', content: response };
@@ -103,18 +97,14 @@ class AIService {
       } catch (error) {
         console.warn(`${provider} failed:`, error.message);
         
-        // If this was the last provider, fallback to mock mode
         if (i === this.availableProviders.length - 1) {
           console.log('All providers failed, using mock mode');
           this.useMockMode = true;
-          this.conversationHistory.pop(); // Remove failed user message
-          return this.sendMessage(userMessage, subject); // Retry with mock mode
+          this.conversationHistory.pop();
+          return this.sendMessage(userMessage, subject);
         }
-        // Otherwise continue to next provider
       }
     }
-
-    // Fallback to mock if loop completes without success
     this.useMockMode = true;
     this.conversationHistory.pop();
     return this.sendMessage(userMessage, subject);

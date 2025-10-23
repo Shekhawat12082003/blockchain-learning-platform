@@ -9,7 +9,6 @@ const IssueCertificate = ({ account, sessionData }) => {
   const [sessionCount, setSessionCount] = useState(1);
 
   const uploadToIPFS = async (data) => {
-    // Mock IPFS upload - In production, use Pinata, NFT.Storage, or IPFS directly
     const metadata = {
       name: `Skill Certificate - ${data.subject || 'General'}`,
       description: `Certificate of completion for AI tutoring session in ${data.subject || 'general'} learning.`,
@@ -22,8 +21,6 @@ const IssueCertificate = ({ account, sessionData }) => {
       session_summary: data.summary || 'Completed personalized learning session'
     };
 
-    // In production, replace with actual IPFS upload
-    // For now, return a mock URI
     const mockUri = `ipfs://QmMockHash${Date.now()}`;
     console.log('Certificate Metadata:', metadata);
     
@@ -46,10 +43,8 @@ const IssueCertificate = ({ account, sessionData }) => {
     setResult(null);
 
     try {
-      // Ensure wallet is connected
       await contractService.connectWallet();
 
-      // Prepare session data
       const certData = {
         subject: subject,
         messageCount: sessionData?.messages?.length || 0,
@@ -57,10 +52,8 @@ const IssueCertificate = ({ account, sessionData }) => {
         summary: 'Successfully completed AI tutoring session'
       };
 
-      // Upload metadata to IPFS (mock for now)
       const tokenURI = await uploadToIPFS(certData);
 
-      // Issue certificate on blockchain with new parameters
       const result = await contractService.issueCertificate(account, subject, tokenURI, sessionCount);
 
       const pointsEarned = sessionCount * 10;

@@ -8,10 +8,8 @@ function ConnectWallet({ onConnect }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if already connected
     checkConnection();
 
-    // Listen for account changes
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', handleAccountsChanged);
       window.ethereum.on('chainChanged', () => window.location.reload());
@@ -29,7 +27,6 @@ function ConnectWallet({ onConnect }) {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
-          // Auto-connect silently if previously connected
           await contractService.connectWallet();
           setAccount(accounts[0]);
           if (onConnect) onConnect(accounts[0]);
@@ -69,7 +66,6 @@ function ConnectWallet({ onConnect }) {
   const disconnectWallet = () => {
     setAccount(null);
     if (onConnect) onConnect(null);
-    // Note: We can't actually disconnect from MetaMask, but we can reset our state
   };
 
   return (
