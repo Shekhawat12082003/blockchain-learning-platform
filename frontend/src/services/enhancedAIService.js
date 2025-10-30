@@ -1,9 +1,9 @@
 import axios from 'axios';
 class EnhancedAIService {
   constructor() {
-    this.geminiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    this.huggingfaceKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
-    this.cohereKey = import.meta.env.VITE_COHERE_API_KEY;
+    this.geminiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    this.huggingfaceKey = process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY;
+    this.cohereKey = process.env.NEXT_PUBLIC_COHERE_API_KEY;
     this.useMockMode = false;
     this.conversationContext = [];
     this.currentSubject = null;

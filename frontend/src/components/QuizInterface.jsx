@@ -66,62 +66,84 @@ const QuizInterface = () => {
   };
   if (loading) {
     return (
-      <div className="quiz-interface">
-        <div className="loading-quiz">
-          <div className="spinner"></div>
-          <p>Generating your personalized quiz...</p>
-        </div>
+      <div className="card text-center py-16">
+        <div className="animate-spin text-6xl mb-4">⚡</div>
+        <p className="text-xl text-white/70">Generating your personalized quiz...</p>
       </div>
     );
   }
   if (!quiz) {
     return (
-      <div className="quiz-interface">
-        <div className="quiz-setup">
-          <h2>📝 Take a Quiz</h2>
-          <p>Test your knowledge and track your progress</p>
-          <div className="setup-form">
-            <div className="form-group">
-              <label>Subject/Topic:</label>
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="card">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl font-bold gradient-text mb-3 flex items-center justify-center gap-3">
+              <span>📝</span> Take a Quiz
+            </h2>
+            <p className="text-white/70 text-lg">Test your knowledge and track your progress</p>
+          </div>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-white font-semibold mb-2">Subject/Topic:</label>
               <input
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="e.g., Python Programming, Algebra, History"
+                className="input-field"
               />
             </div>
-            <div className="form-group">
-              <label>Difficulty Level:</label>
-              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-                <option value="expert">Expert</option>
-              </select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white font-semibold mb-2">Difficulty Level:</label>
+                <select 
+                  value={difficulty} 
+                  onChange={(e) => setDifficulty(e.target.value)}
+                  className="input-field cursor-pointer"
+                >
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                  <option value="expert">Expert</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-white font-semibold mb-2">Number of Questions:</label>
+                <input
+                  type="number"
+                  value={questionCount}
+                  onChange={(e) => setQuestionCount(Math.max(1, Math.min(20, parseInt(e.target.value) || 5)))}
+                  min="1"
+                  max="20"
+                  className="input-field"
+                />
+              </div>
             </div>
-            <div className="form-group">
-              <label>Number of Questions:</label>
-              <input
-                type="number"
-                value={questionCount}
-                onChange={(e) => setQuestionCount(Math.max(1, Math.min(20, parseInt(e.target.value) || 5)))}
-                min="1"
-                max="20"
-              />
-            </div>
-            <button className="generate-btn" onClick={generateQuiz}>
+            <button className="btn-primary w-full text-lg py-4" onClick={generateQuiz}>
               Generate Quiz 🚀
             </button>
           </div>
-          <div className="quiz-benefits">
-            <h3>Why Take Quizzes?</h3>
-            <ul>
-              <li>✅ Test your understanding</li>
-              <li>📊 Track your progress</li>
-              <li>🎯 Identify weak areas</li>
-              <li>🏆 Earn points and certificates</li>
-            </ul>
-          </div>
+        </div>
+        <div className="card">
+          <h3 className="text-2xl font-bold gradient-text mb-4">Why Take Quizzes?</h3>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-3 text-white/80">
+              <span className="text-2xl">✅</span>
+              <span>Test your understanding</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80">
+              <span className="text-2xl">📊</span>
+              <span>Track your progress</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80">
+              <span className="text-2xl">🎯</span>
+              <span>Identify weak areas</span>
+            </li>
+            <li className="flex items-center gap-3 text-white/80">
+              <span className="text-2xl">🏆</span>
+              <span>Earn points and certificates</span>
+            </li>
+          </ul>
         </div>
       </div>
     );
@@ -130,51 +152,58 @@ const QuizInterface = () => {
     const percentage = Math.round((score / quiz.length) * 100);
     const passed = percentage >= 70;
     return (
-      <div className="quiz-interface">
-        <div className="quiz-results">
-          <div className={`results-header ${passed ? 'passed' : 'failed'}`}>
-            <h2>{passed ? '🎉 Congratulations!' : '📚 Keep Learning!'}</h2>
-            <div className="score-display">
-              <span className="score">{score}</span>
-              <span className="total">/ {quiz.length}</span>
-            </div>
-            <p className="percentage">{percentage}%</p>
-            <p className="status">{passed ? 'You Passed!' : 'Try Again'}</p>
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className={`card text-center ${passed ? 'border-green-500/50' : 'border-yellow-500/50'}`}>
+          <div className="text-6xl mb-4">{passed ? '🎉' : '📚'}</div>
+          <h2 className="text-4xl font-bold gradient-text mb-4">
+            {passed ? 'Congratulations!' : 'Keep Learning!'}
+          </h2>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <span className="text-6xl font-bold gradient-text">{score}</span>
+            <span className="text-4xl text-white/50">/ {quiz.length}</span>
           </div>
-          <div className="results-breakdown">
-            <h3>Question Review</h3>
+          <p className="text-3xl font-bold mb-2">{percentage}%</p>
+          <p className="text-xl text-white/70">{passed ? 'You Passed!' : 'Try Again'}</p>
+        </div>
+        <div className="card">
+          <h3 className="text-2xl font-bold gradient-text mb-6">Question Review</h3>
+          <div className="space-y-4">
             {quiz.map((q, index) => {
               const userAnswer = selectedAnswers[index];
               const isCorrect = userAnswer === q.correctAnswer;
               return (
-                <div key={index} className={`question-result ${isCorrect ? 'correct' : 'incorrect'}`}>
-                  <div className="question-header">
-                    <span className="question-number">Q{index + 1}</span>
-                    <span className={`result-icon ${isCorrect ? 'correct' : 'incorrect'}`}>
+                <div key={index} className={`card ${isCorrect ? 'border-green-500/50' : 'border-red-500/50'}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-bold text-white/70">Question {index + 1}</span>
+                    <span className={`text-2xl ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
                       {isCorrect ? '✓' : '✗'}
                     </span>
                   </div>
-                  <p className="question-text">{q.question}</p>
-                  <div className="answer-review">
-                    <p><strong>Your Answer:</strong> {userAnswer || 'Not answered'}</p>
-                    <p><strong>Correct Answer:</strong> {q.correctAnswer}</p>
-                    <div className="explanation">
-                      <strong>Explanation:</strong>
-                      <p>{q.explanation}</p>
+                  <p className="text-lg font-semibold mb-4">{q.question}</p>
+                  <div className="space-y-2 text-sm">
+                    <p className="text-white/70">
+                      <span className="font-semibold">Your Answer:</span> {userAnswer || 'Not answered'}
+                    </p>
+                    <p className="text-green-400">
+                      <span className="font-semibold">Correct Answer:</span> {q.correctAnswer}
+                    </p>
+                    <div className="glass p-3 rounded-lg mt-3">
+                      <p className="font-semibold text-white/90 mb-1">Explanation:</p>
+                      <p className="text-white/70">{q.explanation}</p>
                     </div>
                   </div>
                 </div>
               );
             })}
           </div>
-          <div className="results-actions">
-            <button className="retry-btn" onClick={generateQuiz}>
-              Retake Quiz
-            </button>
-            <button className="new-quiz-btn" onClick={restartQuiz}>
-              New Quiz
-            </button>
-          </div>
+        </div>
+        <div className="flex gap-4">
+          <button className="btn-primary flex-1" onClick={generateQuiz}>
+            Retake Quiz
+          </button>
+          <button className="btn-secondary flex-1" onClick={restartQuiz}>
+            New Quiz
+          </button>
         </div>
       </div>
     );
@@ -182,66 +211,81 @@ const QuizInterface = () => {
   const currentQ = quiz[currentQuestion];
   const progress = ((currentQuestion + 1) / quiz.length) * 100;
   return (
-    <div className="quiz-interface">
-      <div className="quiz-header">
-        <h2>{subject} Quiz</h2>
-        <div className="quiz-progress">
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }}></div>
-          </div>
-          <p>Question {currentQuestion + 1} of {quiz.length}</p>
+    <div className="max-w-4xl mx-auto space-y-6">
+      <div className="card">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold gradient-text">{subject} Quiz</h2>
+          <span className="text-white/70 font-semibold">
+            Question {currentQuestion + 1} of {quiz.length}
+          </span>
+        </div>
+        <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300" 
+            style={{ width: `${progress}%` }}
+          ></div>
         </div>
       </div>
-      <div className="quiz-content">
-        <div className="question-card">
-          <h3 className="question-text">{currentQ.question}</h3>
-          <div className="options-list">
-            {currentQ.options.map((option, index) => {
-              const optionLetter = option.charAt(0);
-              const isSelected = selectedAnswers[currentQuestion] === optionLetter;
-              return (
-                <div
-                  key={index}
-                  className={`option ${isSelected ? 'selected' : ''}`}
-                  onClick={() => selectAnswer(optionLetter)}
-                >
-                  <span className="option-text">{option}</span>
-                  {isSelected && <span className="checkmark">✓</span>}
+      <div className="card">
+        <h3 className="text-2xl font-semibold mb-6">{currentQ.question}</h3>
+        <div className="space-y-3">
+          {currentQ.options.map((option, index) => {
+            const optionLetter = option.charAt(0);
+            const isSelected = selectedAnswers[currentQuestion] === optionLetter;
+            return (
+              <div
+                key={index}
+                onClick={() => selectAnswer(optionLetter)}
+                className={`p-4 rounded-xl cursor-pointer transition-all duration-200 ${
+                  isSelected 
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 border-2 border-white/50 shadow-lg' 
+                    : 'glass border-2 border-white/20 hover:border-white/40 hover:bg-white/20'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-lg">{option}</span>
+                  {isSelected && <span className="text-2xl">✓</span>}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
-        <div className="quiz-navigation">
-          <button
-            className="nav-btn prev"
-            onClick={previousQuestion}
-            disabled={currentQuestion === 0}
-          >
-            ← Previous
+      </div>
+      <div className="flex gap-4">
+        <button
+          onClick={previousQuestion}
+          disabled={currentQuestion === 0}
+          className="btn-secondary disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          ← Previous
+        </button>
+        {currentQuestion === quiz.length - 1 ? (
+          <button className="btn-primary flex-1" onClick={submitQuiz}>
+            Submit Quiz
           </button>
-          {currentQuestion === quiz.length - 1 ? (
-            <button className="submit-btn" onClick={submitQuiz}>
-              Submit Quiz
-            </button>
-          ) : (
-            <button
-              className="nav-btn next"
-              onClick={nextQuestion}
-            >
-              Next →
-            </button>
-          )}
-        </div>
-        <div className="answer-indicator">
-          {quiz.map((_, index) => (
-            <div
-              key={index}
-              className={`indicator-dot ${index === currentQuestion ? 'active' : ''} ${selectedAnswers[index] ? 'answered' : ''}`}
-              onClick={() => setCurrentQuestion(index)}
-            ></div>
-          ))}
-        </div>
+        ) : (
+          <button
+            onClick={nextQuestion}
+            className="btn-primary flex-1"
+          >
+            Next →
+          </button>
+        )}
+      </div>
+      <div className="flex justify-center gap-2 flex-wrap">
+        {quiz.map((_, index) => (
+          <div
+            key={index}
+            onClick={() => setCurrentQuestion(index)}
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${
+              index === currentQuestion 
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 ring-4 ring-blue-500/30 scale-125' 
+                : selectedAnswers[index] 
+                  ? 'bg-green-500' 
+                  : 'bg-white/30'
+            }`}
+          ></div>
+        ))}
       </div>
     </div>
   );
