@@ -45,33 +45,34 @@ ${new Date().toLocaleDateString()}
   };
   if (loading) {
     return (
-      <div className="study-planner">
-        <div className="loading-plan">
-          <div className="spinner"></div>
-          <p>Creating your personalized study plan...</p>
-        </div>
+      <div className="card text-center py-16">
+        <div className="animate-spin text-6xl mb-4">📚</div>
+        <p className="text-lg" style={{color: 'rgba(232, 234, 246, 0.8)'}}>Creating your personalized study plan...</p>
       </div>
     );
   }
   if (!studyPlan) {
     return (
-      <div className="study-planner">
-        <div className="planner-setup">
-          <h2>📅 Create Your Study Plan</h2>
-          <p>Get a personalized, structured plan to master any subject</p>
-          <div className="setup-form">
-            <div className="form-group">
-              <label>What do you want to learn?</label>
+      <div className="max-w-4xl mx-auto">
+        <div className="card">
+          <h2 className="text-2xl font-bold mb-2" style={{color: '#7c8ef5'}}>📅 Create Your Study Plan</h2>
+          <p className="mb-6" style={{color: 'rgba(232, 234, 246, 0.7)'}}>Get a personalized, structured plan to master any subject</p>
+          
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{color: '#e8eaf6'}}>What do you want to learn?</label>
               <input
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 placeholder="e.g., Web Development, Data Science, Spanish"
+                className="input-field w-full"
               />
             </div>
-            <div className="form-group">
-              <label>How much time do you have?</label>
-              <select value={duration} onChange={(e) => setDuration(e.target.value)}>
+            
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{color: '#e8eaf6'}}>How much time do you have?</label>
+              <select value={duration} onChange={(e) => setDuration(e.target.value)} className="input-field w-full cursor-pointer">
                 <option value="2 weeks">2 Weeks (Crash Course)</option>
                 <option value="4 weeks">4 Weeks (Standard)</option>
                 <option value="8 weeks">8 Weeks (Comprehensive)</option>
@@ -79,64 +80,72 @@ ${new Date().toLocaleDateString()}
                 <option value="6 months">6 Months (Mastery)</option>
               </select>
             </div>
-            <div className="form-group">
-              <label>Current Level:</label>
-              <div className="depth-selector">
+            
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{color: '#e8eaf6'}}>Current Level</label>
+              <div className="grid grid-cols-3 gap-3">
                 <button
-                  className={`depth-btn ${level === 'beginner' ? 'active' : ''}`}
+                  className={`py-3 rounded-lg border transition-all ${level === 'beginner' ? 'bg-blue-500/20 border-blue-500/50' : 'border-gray-600 hover:border-gray-500'}`}
                   onClick={() => setLevel('beginner')}
                   type="button"
                 >
-                  🌱 Beginner
+                  <div className="text-2xl mb-1">🌱</div>
+                  <div className="text-sm">Beginner</div>
                 </button>
                 <button
-                  className={`depth-btn ${level === 'intermediate' ? 'active' : ''}`}
+                  className={`py-3 rounded-lg border transition-all ${level === 'intermediate' ? 'bg-blue-500/20 border-blue-500/50' : 'border-gray-600 hover:border-gray-500'}`}
                   onClick={() => setLevel('intermediate')}
                   type="button"
                 >
-                  📚 Intermediate
+                  <div className="text-2xl mb-1">📚</div>
+                  <div className="text-sm">Intermediate</div>
                 </button>
                 <button
-                  className={`depth-btn ${level === 'advanced' ? 'active' : ''}`}
+                  className={`py-3 rounded-lg border transition-all ${level === 'advanced' ? 'bg-blue-500/20 border-blue-500/50' : 'border-gray-600 hover:border-gray-500'}`}
                   onClick={() => setLevel('advanced')}
                   type="button"
                 >
-                  ⭐ Advanced
+                  <div className="text-2xl mb-1">⭐</div>
+                  <div className="text-sm">Advanced</div>
                 </button>
               </div>
             </div>
-            <div className="form-group">
-              <label>What are your learning goals?</label>
+            
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{color: '#e8eaf6'}}>What are your learning goals?</label>
               <textarea
                 value={goals}
                 onChange={(e) => setGoals(e.target.value)}
                 placeholder="e.g., Build a portfolio website, Get job-ready, Pass certification exam..."
                 rows="4"
+                className="input-field w-full resize-none"
               />
             </div>
-            <button className="generate-btn" onClick={generatePlan} type="button">
-              Generate My Study Plan 🎯
+            
+            <button className="btn-primary w-full py-3" onClick={generatePlan} type="button">
+              🎯 Generate My Study Plan
             </button>
           </div>
-          <div className="planner-features" style={{marginTop: '3rem', padding: '2rem', background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(30, 64, 175, 0.03))', borderRadius: 'var(--radius-lg)', border: '2px solid var(--border-light)'}}>
-            <h3 style={{textAlign: 'center', marginBottom: '1.5rem', color: 'var(--text-dark)', fontSize: '1.25rem', fontWeight: '700'}}>✨ Your Plan Includes:</h3>
-            <div className="features-grid" style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem'}}>
-              <div className="feature-item" style={{textAlign: 'center', padding: '1.5rem', background: 'white', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', transition: 'all 0.3s ease'}}>
-                <span className="icon" style={{fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem'}}>📆</span>
-                <p style={{color: 'var(--text-medium)', fontWeight: '600', fontSize: '0.95rem'}}>Week-by-week breakdown</p>
-              </div>
-              <div className="feature-item" style={{textAlign: 'center', padding: '1.5rem', background: 'white', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', transition: 'all 0.3s ease'}}>
-                <span className="icon" style={{fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem'}}>⏰</span>
-                <p style={{color: 'var(--text-medium)', fontWeight: '600', fontSize: '0.95rem'}}>Daily time allocation</p>
-              </div>
-              <div className="feature-item" style={{textAlign: 'center', padding: '1.5rem', background: 'white', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', transition: 'all 0.3s ease'}}>
-                <span className="icon" style={{fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem'}}>📚</span>
-                <p style={{color: 'var(--text-medium)', fontWeight: '600', fontSize: '0.95rem'}}>Specific topics to cover</p>
-              </div>
-              <div className="feature-item" style={{textAlign: 'center', padding: '1.5rem', background: 'white', borderRadius: 'var(--radius-md)', boxShadow: 'var(--shadow-sm)', transition: 'all 0.3s ease'}}>
-                <span className="icon" style={{fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem'}}>🎯</span>
-                <p style={{color: 'var(--text-medium)', fontWeight: '600', fontSize: '0.95rem'}}>Milestones & checkpoints</p>
-              </div>
+        </div>
+        
+        <div className="card mt-5" style={{borderColor: 'rgba(91, 110, 225, 0.3)'}}>
+          <h3 className="text-lg font-semibold mb-4 text-center" style={{color: '#7c8ef5'}}>✨ Your Plan Includes</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="text-center p-3 glass rounded-lg">
+              <div className="text-3xl mb-2">📆</div>
+              <p className="text-xs" style={{color: 'rgba(232, 234, 246, 0.8)'}}>Week-by-week breakdown</p>
+            </div>
+            <div className="text-center p-3 glass rounded-lg">
+              <div className="text-3xl mb-2">⏰</div>
+              <p className="text-xs" style={{color: 'rgba(232, 234, 246, 0.8)'}}>Daily time allocation</p>
+            </div>
+            <div className="text-center p-3 glass rounded-lg">
+              <div className="text-3xl mb-2">📚</div>
+              <p className="text-xs" style={{color: 'rgba(232, 234, 246, 0.8)'}}>Specific topics</p>
+            </div>
+            <div className="text-center p-3 glass rounded-lg">
+              <div className="text-3xl mb-2">🎯</div>
+              <p className="text-xs" style={{color: 'rgba(232, 234, 246, 0.8)'}}>Milestones</p>
             </div>
           </div>
         </div>
@@ -144,68 +153,77 @@ ${new Date().toLocaleDateString()}
     );
   }
   return (
-    <div className="study-planner">
-      <div className="study-plan-view">
-        <div className="plan-header">
-          <h2 className="plan-title">📚 Your Personalized Study Plan</h2>
-          <div className="plan-meta">
-            <span className="meta-item">📖 {studyPlan.subject}</span>
-            <span className="meta-item">⏱️ {studyPlan.duration}</span>
-            <span className="meta-item">📊 {studyPlan.level}</span>
-          </div>
+    <div className="max-w-5xl mx-auto">
+      <div className="card mb-4">
+        <h2 className="text-2xl font-bold mb-3" style={{color: '#7c8ef5'}}>📚 Your Personalized Study Plan</h2>
+        <div className="flex flex-wrap gap-3">
+          <span className="glass px-3 py-1 rounded text-sm">📖 {studyPlan.subject}</span>
+          <span className="glass px-3 py-1 rounded text-sm">⏱️ {studyPlan.duration}</span>
+          <span className="glass px-3 py-1 rounded text-sm">📊 {studyPlan.level}</span>
         </div>
-        <div className="milestones-list" style={{listStyle: 'none', padding: 0}}>
-          {studyPlan.plan.split('\n\n').filter(section => section.trim()).map((section, index) => {
-            const lines = section.split('\n');
-            const title = lines[0].replace(/\*\*/g, '').trim();
-            const content = lines.slice(1).join('\n');
-            return (
-              <div key={index} className="milestone-item">
-                <div className="milestone-header">
-                  <h3 className="milestone-title">{title}</h3>
-                  <span className="milestone-duration">Week {index + 1}</span>
-                </div>
-                <div className="milestone-content">
-                  {content.split('\n').map((line, i) => {
-                    if (line.trim().startsWith('•') || line.trim().startsWith('✓') || line.trim().startsWith('→')) {
-                      return <p key={i} style={{marginLeft: '1rem'}}>• {line.substring(1).trim()}</p>;
-                    } else if (line.trim()) {
-                      return <p key={i}>{line}</p>;
-                    }
-                    return null;
-                  })}
-                </div>
+      </div>
+      
+      <div className="space-y-4">
+        {studyPlan.plan.split('\n\n').filter(section => section.trim()).map((section, index) => {
+          const lines = section.split('\n');
+          const title = lines[0].replace(/\*\*/g, '').trim();
+          const content = lines.slice(1).join('\n');
+          return (
+            <div key={index} className="card">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-lg font-semibold" style={{color: '#7c8ef5'}}>{title}</h3>
+                <span className="glass px-3 py-1 rounded text-xs">Week {index + 1}</span>
               </div>
-            );
-          })}
-        </div>
-        <div className="plan-actions" style={{display: 'flex', gap: '1rem', marginTop: '2.5rem', flexWrap: 'wrap'}}>
-          <button 
-            className="new-plan-btn"
-            onClick={() => setStudyPlan(null)}
-            type="button"
-            style={{flex: 1, minWidth: '200px'}}
-          >
-            📝 Create New Plan
-          </button>
-          <button 
-            className="generate-btn" 
-            onClick={exportPlan}
-            type="button"
-            style={{flex: 1, minWidth: '200px', background: 'linear-gradient(135deg, var(--success-color), #059669)'}}
-          >
-            📥 Export Plan
-          </button>
-        </div>
-        <div className="plan-tips" style={{marginTop: '3rem', padding: '2rem', background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.03))', borderRadius: 'var(--radius-lg)', border: '2px solid rgba(16, 185, 129, 0.2)'}}>
-          <h3 style={{color: 'var(--text-dark)', fontSize: '1.25rem', marginBottom: '1.25rem', fontWeight: '700'}}>💡 Tips for Success</h3>
-          <ul style={{listStyle: 'none', padding: 0, display: 'grid', gap: '0.75rem'}}>
-            <li style={{padding: '0.75rem 1rem', background: 'white', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--success-color)', color: 'var(--text-medium)', fontSize: '0.95rem'}}>✅ Stick to the schedule - consistency is key</li>
-            <li style={{padding: '0.75rem 1rem', background: 'white', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--success-color)', color: 'var(--text-medium)', fontSize: '0.95rem'}}>✅ Don't skip fundamentals - they're crucial</li>
-            <li style={{padding: '0.75rem 1rem', background: 'white', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--success-color)', color: 'var(--text-medium)', fontSize: '0.95rem'}}>✅ Practice daily, even if just for 20 minutes</li>
-            <li style={{padding: '0.75rem 1rem', background: 'white', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--success-color)', color: 'var(--text-medium)', fontSize: '0.95rem'}}>✅ Track your progress and adjust as needed</li>
-            <li style={{padding: '0.75rem 1rem', background: 'white', borderRadius: 'var(--radius-md)', borderLeft: '4px solid var(--success-color)', color: 'var(--text-medium)', fontSize: '0.95rem'}}>✅ Join communities for support and motivation</li>
-          </ul>
+              <div className="space-y-2 text-sm" style={{color: 'rgba(232, 234, 246, 0.8)'}}>
+                {content.split('\n').map((line, i) => {
+                  if (line.trim().startsWith('•') || line.trim().startsWith('✓') || line.trim().startsWith('→')) {
+                    return <p key={i} className="ml-4">• {line.substring(1).trim()}</p>;
+                  } else if (line.trim()) {
+                    return <p key={i}>{line}</p>;
+                  }
+                  return null;
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      
+      <div className="flex gap-3 mt-5">
+        <button 
+          className="btn-secondary flex-1"
+          onClick={() => setStudyPlan(null)}
+          type="button"
+        >
+          📝 Create New Plan
+        </button>
+        <button 
+          className="btn-primary flex-1"
+          onClick={exportPlan}
+          type="button"
+        >
+          📥 Export Plan
+        </button>
+      </div>
+      
+      <div className="card mt-5" style={{borderColor: 'rgba(34, 197, 94, 0.3)'}}>
+        <h3 className="text-lg font-semibold mb-3" style={{color: '#22c55e'}}>💡 Tips for Success</h3>
+        <div className="space-y-2">
+          <div className="glass p-3 rounded text-sm" style={{borderLeft: '3px solid #22c55e', color: 'rgba(232, 234, 246, 0.8)'}}>
+            ✅ Stick to the schedule - consistency is key
+          </div>
+          <div className="glass p-3 rounded text-sm" style={{borderLeft: '3px solid #22c55e', color: 'rgba(232, 234, 246, 0.8)'}}>
+            ✅ Don't skip fundamentals - they're crucial
+          </div>
+          <div className="glass p-3 rounded text-sm" style={{borderLeft: '3px solid #22c55e', color: 'rgba(232, 234, 246, 0.8)'}}>
+            ✅ Practice daily, even if just for 20 minutes
+          </div>
+          <div className="glass p-3 rounded text-sm" style={{borderLeft: '3px solid #22c55e', color: 'rgba(232, 234, 246, 0.8)'}}>
+            ✅ Track your progress and adjust as needed
+          </div>
+          <div className="glass p-3 rounded text-sm" style={{borderLeft: '3px solid #22c55e', color: 'rgba(232, 234, 246, 0.8)'}}>
+            ✅ Join communities for support and motivation
+          </div>
         </div>
       </div>
     </div>

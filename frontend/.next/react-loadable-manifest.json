@@ -4,17 +4,5 @@
     "files": [
       "static/chunks/src_components_ChatInterface_jsx.js"
     ]
-  },
-  "leaderboard.jsx -> ../src/components/Leaderboard": {
-    "id": "leaderboard.jsx -> ../src/components/Leaderboard",
-    "files": [
-      "static/chunks/src_components_Leaderboard_jsx.js"
-    ]
-  },
-  "verify.jsx -> ../src/components/VerifyCertificate": {
-    "id": "verify.jsx -> ../src/components/VerifyCertificate",
-    "files": [
-      "static/chunks/src_components_VerifyCertificate_jsx.js"
-    ]
   }
 }
