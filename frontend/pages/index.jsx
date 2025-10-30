@@ -42,28 +42,28 @@ export default function Home() {
 
   return (
     <MainLayout>
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="card">
+      <div className="max-w-6xl mx-auto">
+        <div className="card mb-5">
           <ChatInterface account={account} />
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="card hover:scale-105 transition-transform duration-300">
-            <div className="text-4xl mb-4">🔗</div>
-            <h3 className="text-xl font-bold gradient-text mb-2">Connect Wallet</h3>
-            <p className="text-white/70">Connect MetaMask to start learning</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="card">
+            <div className="text-3xl mb-3">🔗</div>
+            <h3 className="text-lg font-semibold mb-2" style={{color: '#7c8ef5'}}>Connect Wallet</h3>
+            <p className="text-sm" style={{color: 'rgba(232, 234, 246, 0.7)'}}>Link your MetaMask wallet to get started</p>
           </div>
           
-          <div className="card hover:scale-105 transition-transform duration-300">
-            <div className="text-4xl mb-4">🤖</div>
-            <h3 className="text-xl font-bold gradient-text mb-2">AI Tutoring</h3>
-            <p className="text-white/70">Get personalized help from AI</p>
+          <div className="card">
+            <div className="text-3xl mb-3">🤖</div>
+            <h3 className="text-lg font-semibold mb-2" style={{color: '#7c8ef5'}}>AI-Powered Learning</h3>
+            <p className="text-sm" style={{color: 'rgba(232, 234, 246, 0.7)'}}>Chat with AI tutors on any topic</p>
           </div>
           
-          <div className="card hover:scale-105 transition-transform duration-300">
-            <div className="text-4xl mb-4">📜</div>
-            <h3 className="text-xl font-bold gradient-text mb-2">Earn Certificates</h3>
-            <p className="text-white/70">Blockchain-verified certificates</p>
+          <div className="card">
+            <div className="text-3xl mb-3">📜</div>
+            <h3 className="text-lg font-semibold mb-2" style={{color: '#7c8ef5'}}>NFT Certificates</h3>
+            <p className="text-sm" style={{color: 'rgba(232, 234, 246, 0.7)'}}>Earn verifiable blockchain certificates</p>
           </div>
         </div>
       </div>

@@ -17,25 +17,27 @@ function Sidebar() {
   ];
   
   return (
-    <aside className="w-72 glass min-h-screen flex flex-col p-6">
+    <aside className="w-64 min-h-screen flex flex-col p-5" style={{background: 'rgba(12, 18, 38, 0.9)', borderRight: '1px solid rgba(100, 120, 180, 0.15)'}}>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold gradient-text flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
           🎓 AI Tutor
         </h1>
-        <p className="text-white/70 text-sm mt-1">Web3 Learning</p>
+        <p className="text-sm mt-1" style={{color: 'rgba(232, 234, 246, 0.6)'}}>Blockchain Learning</p>
       </div>
       
-      <nav className="flex-1 space-y-2">
+      <nav className="flex-1 space-y-1">
         {menuItems.map((item) => (
           <Link key={item.path} href={item.path} className={`sidebar-link ${router.pathname === item.path ? 'active' : ''}`}>
-            <span className="text-2xl">{item.icon}</span>
-            <span className="font-medium">{item.label}</span>
+            <span className="text-xl">{item.icon}</span>
+            <span className="text-sm">{item.label}</span>
           </Link>
         ))}
       </nav>
       
-      <div className="mt-auto pt-6 border-t border-white/10">
-        <p className="text-xs text-white/50 text-center">Built with AI & Blockchain</p>
+      <div className="mt-auto pt-5" style={{borderTop: '1px solid rgba(100, 120, 180, 0.15)'}}>
+        <p className="text-xs text-center" style={{color: 'rgba(232, 234, 246, 0.5)'}}>
+          Powered by Core Blockchain
+        </p>
       </div>
     </aside>
   );
@@ -46,20 +48,20 @@ export default function MainLayout({ children }) {
     <div className="flex min-h-screen">
       <Sidebar />
       <div className="flex-1 flex flex-col">
-        <nav className="glass border-b border-white/10 px-8 py-4">
+        <nav className="px-6 py-3" style={{background: 'rgba(12, 18, 38, 0.5)', borderBottom: '1px solid rgba(100, 120, 180, 0.15)'}}>
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-white/70 text-sm">Personalized Learning Platform</span>
+              <span className="text-sm" style={{color: 'rgba(232, 234, 246, 0.7)'}}>Learn anything with AI-powered tutoring</span>
             </div>
             <ConnectWallet />
           </div>
         </nav>
         
-        <main className="flex-1 p-8 overflow-auto">{children}</main>
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
         
-        <footer className="glass border-t border-white/10 px-8 py-4">
-          <p className="text-xs text-white/50 text-center">
-            Contract: 0xF5689A0B960b9fED8D40422676B580FD10Ed6322 on Core Testnet2
+        <footer className="px-6 py-3" style={{background: 'rgba(12, 18, 38, 0.5)', borderTop: '1px solid rgba(100, 120, 180, 0.15)'}}>
+          <p className="text-xs text-center" style={{color: 'rgba(232, 234, 246, 0.5)'}}>
+            Smart Contract: 0xF5689...6322 • Core Testnet2
           </p>
         </footer>
       </div>
