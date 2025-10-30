@@ -66,116 +66,145 @@ const ProgressDashboard = () => {
   };
   if (loading) {
     return (
-      <div className="progress-dashboard">
-        <div className="loading-explanation">
-          <div className="spinner"></div>
-          <p>Loading your progress...</p>
-        </div>
+      <div className="card text-center py-16">
+        <div className="animate-spin text-6xl mb-4">📊</div>
+        <p className="text-xl text-white/70">Loading your progress...</p>
       </div>
     );
   }
   if (error) {
     return (
-      <div className="progress-dashboard">
-        <div className="error">{error}</div>
+      <div className="card border-red-500/50">
+        <div className="text-center py-8">
+          <div className="text-6xl mb-4">⚠️</div>
+          <p className="text-red-400 text-lg">{error}</p>
+          <button onClick={loadProgress} className="btn-primary mt-4">Retry</button>
+        </div>
       </div>
     );
   }
   if (!progress) {
     return (
-      <div className="progress-dashboard">
-        <div className="no-progress">Start learning to track your progress!</div>
+      <div className="card text-center py-16">
+        <div className="text-6xl mb-4">🎓</div>
+        <p className="text-xl text-white/70">Start learning to track your progress!</p>
       </div>
     );
   }
   return (
-    <div className="progress-dashboard">
-      <div className="dashboard-header">
-        <h1>📊 Learning Progress Dashboard</h1>
-        <p className="user-address">Wallet: {address.slice(0, 6)}...{address.slice(-4)}</p>
-      </div>
-      <div className="progress-overview">
-        <div className="level-card" role="region" aria-label="Level overview">
-          <div className="level-number" aria-hidden>{progress.level}</div>
-          <div className="level-label">LEVEL</div>
-          <div className="points-info" style={{marginTop: '1.5rem'}}>
-            <div className="points-stat">
-              <div className="stat-value">{progress.points}</div>
-              <div className="stat-label">Total Points</div>
-            </div>
-            <div className="points-stat">
-              <div className="stat-value">{progress.totalCertificates}</div>
-              <div className="stat-label">Certificates</div>
-            </div>
-            <div className="points-stat">
-              <div className="stat-value">{progress.totalSessions}</div>
-              <div className="stat-label">Sessions</div>
-            </div>
-            <div className="points-stat">
-              <div className="stat-value">{subjectBreakdown.length}</div>
-              <div className="stat-label">Subjects</div>
-            </div>
-          </div>
-          <div className="level-progress" style={{marginTop: '1.5rem'}}>
-            <div className="progress-bar" aria-hidden style={{height: '12px', borderRadius: '999px', background: 'rgba(255,255,255,0.15)'}}>
-              <div
-                className="progress-fill"
-                style={{ width: `${getLevelProgress()}%`, height: '100%', borderRadius: '999px', background: 'linear-gradient(90deg, #fff, rgba(255,255,255,0.7))' }}
-              />
-            </div>
-            <p className="progress-text" style={{marginTop: '0.75rem', color: 'rgba(255,255,255,0.95)'}}>
-              {progress.points} / {getNextLevelPoints()} points to next level
-            </p>
-          </div>
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div className="card">
+        <div className="flex items-center justify-between">
+          <h1 className="text-4xl font-bold gradient-text flex items-center gap-3">
+            <span>📊</span> Learning Progress Dashboard
+          </h1>
+          <span className="glass px-4 py-2 rounded-full text-sm font-mono">
+            {address.slice(0, 6)}...{address.slice(-4)}
+          </span>
         </div>
       </div>
-      <section className="subject-breakdown">
-        <h2 className="section-title">📖 Subject Breakdown</h2>
+
+      <div className="card bg-gradient-to-br from-blue-500/20 to-purple-600/20 border-blue-500/50">
+        <div className="text-center mb-8">
+          <div className="text-8xl font-bold gradient-text mb-2">{progress.level}</div>
+          <div className="text-2xl font-semibold text-white/70">LEVEL</div>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-1">{progress.points}</div>
+            <div className="text-white/70">Total Points</div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-1">{progress.totalCertificates}</div>
+            <div className="text-white/70">Certificates</div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-1">{progress.totalSessions}</div>
+            <div className="text-white/70">Sessions</div>
+          </div>
+          <div className="text-center">
+            <div className="text-4xl font-bold text-white mb-1">{subjectBreakdown.length}</div>
+            <div className="text-white/70">Subjects</div>
+          </div>
+        </div>
+        
+        <div>
+          <div className="w-full bg-white/10 rounded-full h-4 overflow-hidden mb-3">
+            <div
+              className="h-full bg-gradient-to-r from-white to-white/70 transition-all duration-500"
+              style={{ width: `${getLevelProgress()}%` }}
+            />
+          </div>
+          <p className="text-center text-white/90 font-semibold">
+            {progress.points} / {getNextLevelPoints()} points to next level
+          </p>
+        </div>
+      </div>
+
+      <div className="card">
+        <h2 className="text-3xl font-bold gradient-text mb-6 flex items-center gap-2">
+          <span>📖</span> Subject Breakdown
+        </h2>
         {subjectBreakdown.length === 0 ? (
-          <p className="no-subjects">No subjects studied yet. Start learning!</p>
+          <p className="text-center text-white/70 py-8">No subjects studied yet. Start learning!</p>
         ) : (
-          <div className="subjects-grid">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {subjectBreakdown.map((item, index) => (
-              <div key={item.subject} className="subject-card">
-                <div className="subject-name">#{index + 1} {item.subject}</div>
-                <div className="subject-count">
-                  <span>🎓 {item.certificates} certificates</span>
-                  <span>📚 {item.sessions} sessions</span>
+              <div key={item.subject} className="glass p-6 rounded-xl hover:bg-white/20 transition-all">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center font-bold text-sm">
+                    #{index + 1}
+                  </span>
+                  <div className="text-xl font-bold">{item.subject}</div>
+                </div>
+                <div className="space-y-2 text-white/80">
+                  <div className="flex items-center gap-2">
+                    <span>🎓</span>
+                    <span>{item.certificates} certificates</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>📚</span>
+                    <span>{item.sessions} sessions</span>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-      </section>
-      <section className="achievements">
-        <h2 className="section-title">🏅 Achievements</h2>
-        <div className="achievements-grid">
-          <div className={`achievement-card ${progress.totalCertificates >= 1 ? 'unlocked' : 'locked'}`}>
-            <div className="achievement-icon">🎯</div>
-            <div className="achievement-name">First Certificate</div>
+      </div>
+
+      <div className="card">
+        <h2 className="text-3xl font-bold gradient-text mb-6 flex items-center gap-2">
+          <span>🏅</span> Achievements
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className={`card text-center transition-all ${progress.totalCertificates >= 1 ? 'border-yellow-500/50 bg-yellow-500/10' : 'opacity-40'}`}>
+            <div className="text-4xl mb-2">🎯</div>
+            <div className="text-sm font-semibold">First Certificate</div>
           </div>
-          <div className={`achievement-card ${progress.totalCertificates >= 5 ? 'unlocked' : 'locked'}`}>
-            <div className="achievement-icon">🌟</div>
-            <div className="achievement-name">5 Certificates</div>
+          <div className={`card text-center transition-all ${progress.totalCertificates >= 5 ? 'border-yellow-500/50 bg-yellow-500/10' : 'opacity-40'}`}>
+            <div className="text-4xl mb-2">🌟</div>
+            <div className="text-sm font-semibold">5 Certificates</div>
           </div>
-          <div className={`achievement-card ${progress.totalCertificates >= 10 ? 'unlocked' : 'locked'}`}>
-            <div className="achievement-icon">💎</div>
-            <div className="achievement-name">10 Certificates</div>
+          <div className={`card text-center transition-all ${progress.totalCertificates >= 10 ? 'border-yellow-500/50 bg-yellow-500/10' : 'opacity-40'}`}>
+            <div className="text-4xl mb-2">💎</div>
+            <div className="text-sm font-semibold">10 Certificates</div>
           </div>
-          <div className={`achievement-card ${progress.level >= 5 ? 'unlocked' : 'locked'}`}>
-            <div className="achievement-icon">🚀</div>
-            <div className="achievement-name">Level 5 Master</div>
+          <div className={`card text-center transition-all ${progress.level >= 5 ? 'border-yellow-500/50 bg-yellow-500/10' : 'opacity-40'}`}>
+            <div className="text-4xl mb-2">🚀</div>
+            <div className="text-sm font-semibold">Level 5 Master</div>
           </div>
-          <div className={`achievement-card ${subjectBreakdown.length >= 3 ? 'unlocked' : 'locked'}`}>
-            <div className="achievement-icon">📚</div>
-            <div className="achievement-name">Multi-Subject Expert</div>
+          <div className={`card text-center transition-all ${subjectBreakdown.length >= 3 ? 'border-yellow-500/50 bg-yellow-500/10' : 'opacity-40'}`}>
+            <div className="text-4xl mb-2">📚</div>
+            <div className="text-sm font-semibold">Multi-Subject</div>
           </div>
-          <div className={`achievement-card ${progress.totalSessions >= 50 ? 'unlocked' : 'locked'}`}>
-            <div className="achievement-icon">⏰</div>
-            <div className="achievement-name">50 Sessions</div>
+          <div className={`card text-center transition-all ${progress.totalSessions >= 50 ? 'border-yellow-500/50 bg-yellow-500/10' : 'opacity-40'}`}>
+            <div className="text-4xl mb-2">⏰</div>
+            <div className="text-sm font-semibold">50 Sessions</div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

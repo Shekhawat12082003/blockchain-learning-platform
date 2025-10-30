@@ -59,27 +59,36 @@ function ConnectWallet({ onConnect }) {
     if (onConnect) onConnect(null);
   };
   return (
-    <div className="connect-wallet">
+    <div className="relative">
       {!account ? (
         <button 
           onClick={connectWallet} 
           disabled={isConnecting}
-          className="connect-btn"
+          className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
+          <span className="text-lg">🔗</span>
           {isConnecting ? 'Connecting...' : 'Connect Wallet'}
         </button>
       ) : (
-        <div className="wallet-connected">
-          <div className="wallet-info">
-            <span className="wallet-icon">🔒</span>
-            <span className="wallet-address">{formatAddress(account)}</span>
+        <div className="flex items-center gap-2 glass px-4 py-2 rounded-xl">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">🔒</span>
+            <span className="font-mono text-sm text-white">{formatAddress(account)}</span>
           </div>
-          <button onClick={disconnectWallet} className="disconnect-btn" title="Disconnect">
-            ✕
+          <button 
+            onClick={disconnectWallet} 
+            className="ml-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-500/20 transition-colors" 
+            title="Disconnect"
+          >
+            <span className="text-red-400 text-sm">✕</span>
           </button>
         </div>
       )}
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="absolute top-full mt-2 right-0 bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-2 rounded-lg text-sm backdrop-blur-lg">
+          {error}
+        </div>
+      )}
     </div>
   );
 };

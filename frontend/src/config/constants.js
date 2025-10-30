@@ -1,5 +1,5 @@
-export const CONTRACT_ADDRESS = import.meta.env.VITE_CONTRACT_ADDRESS || '0xF5689A0B960b9fED8D40422676B580FD10Ed6322';
-export const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID || '1114');
+export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xF5689A0B960b9fED8D40422676B580FD10Ed6322';
+export const CHAIN_ID = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID || '1114');
 export const CHAIN_NAME = 'Core Testnet2';
 export const RPC_URL = 'https://rpc.test2.btcs.network';
 export const CONTRACT_ABI = [

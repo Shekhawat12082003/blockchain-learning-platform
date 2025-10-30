@@ -5,19 +5,19 @@ class AIService {
     this.provider = this.detectProvider();
     this.conversationHistory = [];
     this.availableProviders = this.getAvailableProviders();
-    this.useMockMode = this.availableProviders.length === 0 || import.meta.env.VITE_USE_MOCK_AI === 'true';
+    this.useMockMode = this.availableProviders.length === 0 || process.env.NEXT_PUBLIC_USE_MOCK_AI === 'true';
   }
   getAvailableProviders() {
     const providers = [];
-    if (import.meta.env.VITE_GEMINI_API_KEY) providers.push(AI_PROVIDERS.GEMINI);
-    if (import.meta.env.VITE_HUGGINGFACE_API_KEY) providers.push(AI_PROVIDERS.HUGGINGFACE);
-    if (import.meta.env.VITE_COHERE_API_KEY) providers.push(AI_PROVIDERS.COHERE);
+    if (process.env.NEXT_PUBLIC_GEMINI_API_KEY) providers.push(AI_PROVIDERS.GEMINI);
+    if (process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY) providers.push(AI_PROVIDERS.HUGGINGFACE);
+    if (process.env.NEXT_PUBLIC_COHERE_API_KEY) providers.push(AI_PROVIDERS.COHERE);
     return providers;
   }
   detectProvider() {
-    if (import.meta.env.VITE_GEMINI_API_KEY) return AI_PROVIDERS.GEMINI;
-    if (import.meta.env.VITE_HUGGINGFACE_API_KEY) return AI_PROVIDERS.HUGGINGFACE;
-    if (import.meta.env.VITE_COHERE_API_KEY) return AI_PROVIDERS.COHERE;
+    if (process.env.NEXT_PUBLIC_GEMINI_API_KEY) return AI_PROVIDERS.GEMINI;
+    if (process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY) return AI_PROVIDERS.HUGGINGFACE;
+    if (process.env.NEXT_PUBLIC_COHERE_API_KEY) return AI_PROVIDERS.COHERE;
     return null;
   }
   getMockResponse(message, subject) {
@@ -95,7 +95,7 @@ class AIService {
     return this.sendMessage(userMessage, subject);
   }
   async callGemini(message, subject) {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
     const prompt = `You are a helpful tutor specializing in ${subject}. Provide clear, concise explanations. Keep responses under 200 words.\n\nUser: ${message}`;
     try {
       const response = await axios.post(
@@ -120,7 +120,7 @@ class AIService {
     }
   }
   async callHuggingFace(message, subject) {
-    const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_HUGGINGFACE_API_KEY;
     const systemPrompt = `You are a helpful tutor specializing in ${subject}. Provide clear, concise explanations. Keep responses under 200 words.`;
     try {
       const response = await axios.post(
@@ -147,7 +147,7 @@ class AIService {
     }
   }
   async callCohere(message, subject) {
-    const apiKey = import.meta.env.VITE_COHERE_API_KEY;
+    const apiKey = process.env.NEXT_PUBLIC_COHERE_API_KEY;
     const systemPrompt = `You are a helpful and knowledgeable tutor specializing in ${subject}. Provide clear, concise explanations and encourage learning. Keep responses under 200 words.`;
     try {
       const response = await axios.post(
